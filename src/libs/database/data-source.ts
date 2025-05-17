@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
-import { PostEntity } from '@src/database/post/entity/post.entity';
-import { CommentEntity } from '@src/database/post/entity/comment.entity';
-import { ReplyCommentEntity } from '@src/database/post/entity/reply-comment.entity';
-import { KeywordEntity } from '@src/database/post/entity/keyword.entity';
+import { PostEntity } from '@src/libs/database/post/entity/post.entity';
+import { CommentEntity } from '@src/libs/database/post/entity/comment.entity';
+import { ReplyCommentEntity } from '@src/libs/database/post/entity/reply-comment.entity';
+import { KeywordEntity } from '@src/libs/database/post/entity/keyword.entity';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',

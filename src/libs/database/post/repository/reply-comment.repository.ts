@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { ReplyCommentEntity } from '@src/database/post/entity/reply-comment.entity';
+import { ReplyCommentEntity } from '@src/libs/database/post/entity/reply-comment.entity';
 
 @Injectable()
 export class ReplyCommentRepository {

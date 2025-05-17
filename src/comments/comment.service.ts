@@ -3,10 +3,10 @@ import {
   CreateCommentDto,
   CreateCommentResponse,
 } from '@src/comments/dto/create-comment.dto';
-import { CommentRepository } from '@src/database/post/repository/comment.repository';
+import { CommentRepository } from '@src/libs/database/post/repository/comment.repository';
 import { PostService } from '@src/posts/post.service';
 import { plainToInstance } from 'class-transformer';
-import { CommentEntity } from '@src/database/post/entity/comment.entity';
+import { CommentEntity } from '@src/libs/database/post/entity/comment.entity';
 import {
   GetCommentsDto,
   GetCommentsResponse,
@@ -16,7 +16,7 @@ import {
   CreateReplyCommentDto,
   CreateReplyCommentResponse,
 } from '@src/comments/dto/create-reply-comment.dto';
-import { ReplyCommentRepository } from '@src/database/post/repository/reply-comment.repository';
+import { ReplyCommentRepository } from '@src/libs/database/post/repository/reply-comment.repository';
 
 @Injectable()
 export class CommentService {

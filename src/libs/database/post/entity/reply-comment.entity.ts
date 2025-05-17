@@ -2,19 +2,21 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CommentEntity } from '@src/database/post/entity/comment.entity';
+import { CommentEntity } from '@src/libs/database/post/entity/comment.entity';
 
-@Entity('post')
-export class PostEntity {
+@Entity('reply_comment')
+export class ReplyCommentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  title: string;
+  @ManyToOne(() => CommentEntity, (comment) => comment.replies, {
+    onDelete: 'CASCADE',
+  })
+  comment: CommentEntity;
 
   @Column('text')
   content: string;
@@ -22,15 +24,9 @@ export class PostEntity {
   @Column()
   authorName: string;
 
-  @Column()
-  password: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToMany(() => CommentEntity, (comment) => comment.post)
-  comments: CommentEntity[];
 }

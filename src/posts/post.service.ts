@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import _ from 'lodash';
-import { PostRepository } from '@src/database/post/repository/post.repository';
+import { PostRepository } from '@src/libs/database/post/repository/post.repository';
 import {
   GetPostsDto,
   GetPostsResponse,
@@ -20,7 +20,7 @@ import { plainToInstance } from 'class-transformer';
 import { UpdatePostDto } from '@src/posts/dto/update-post.dto';
 import { GetPostByIdResponse } from '@src/posts/dto/get-post-by-id.dto';
 import { DeletePostByIdDto } from '@src/posts/dto/delete-post-by-id.dto';
-import { PostEntity } from '@src/database/post/entity/post.entity';
+import { PostEntity } from '@src/libs/database/post/entity/post.entity';
 
 @Injectable()
 export class PostService {

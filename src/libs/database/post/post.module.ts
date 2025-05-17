@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PostEntity } from '@src/database/post/entity/post.entity';
-import { CommentEntity } from '@src/database/post/entity/comment.entity';
-import { KeywordEntity } from '@src/database/post/entity/keyword.entity';
-import { PostRepository } from '@src/database/post/repository/post.repository';
-import { CommentRepository } from '@src/database/post/repository/comment.repository';
-import { ReplyCommentEntity } from '@src/database/post/entity/reply-comment.entity';
-import { ReplyCommentRepository } from '@src/database/post/repository/reply-comment.repository';
+import { PostEntity } from '@src/libs/database/post/entity/post.entity';
+import { CommentEntity } from '@src/libs/database/post/entity/comment.entity';
+import { KeywordEntity } from '@src/libs/database/post/entity/keyword.entity';
+import { PostRepository } from '@src/libs/database/post/repository/post.repository';
+import { CommentRepository } from '@src/libs/database/post/repository/comment.repository';
+import { ReplyCommentEntity } from '@src/libs/database/post/entity/reply-comment.entity';
+import { ReplyCommentRepository } from '@src/libs/database/post/repository/reply-comment.repository';
 
 @Module({
   imports: [
