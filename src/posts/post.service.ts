@@ -1,0 +1,109 @@
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import _ from 'lodash';
+import { PostRepository } from '@src/database/post/repository/post.repository';
+import {
+  GetPostsDto,
+  GetPostsResponse,
+  GetPostsResponseItem,
+  GetPostsResponsePageInfo,
+} from '@src/posts/dto/get-posts.dto';
+import {
+  CreatePostDto,
+  CreatePostResponse,
+} from '@src/posts/dto/create-post.dto';
+import { plainToInstance } from 'class-transformer';
+import { UpdatePostDto } from '@src/posts/dto/update-post.dto';
+import { GetPostByIdResponse } from '@src/posts/dto/get-post-by-id.dto';
+import { DeletePostByIdDto } from '@src/posts/dto/delete-post-by-id.dto';
+import { PostEntity } from '@src/database/post/entity/post.entity';
+
+@Injectable()
+export class PostService {
+  constructor(
+    private readonly postRepository: PostRepository,
+    // private readonly keywordRepository: PostRepository,
+  ) {}
+
+  async getPosts(query: GetPostsDto): Promise<GetPostsResponse> {
+    const [items, total] = await this.postRepository.findAndCount(query);
+    const pageInfo: GetPostsResponsePageInfo = {
+      totalCount: total,
+      lastPage: Math.ceil(total / query.pageSize),
+    };
+    return {
+      pageInfo,
+      items: items.map((item) =>
+        plainToInstance(GetPostsResponseItem, item, {
+          excludeExtraneousValues: true,
+        }),
+      ),
+    };
+  }
+
+  async getPostById(id: number): Promise<CreatePostResponse> {
+    const post = await this.postRepository.findById(id);
+    if (!post) throw new NotFoundException();
+    return plainToInstance(GetPostByIdResponse, post, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async createPost(body: CreatePostDto): Promise<CreatePostResponse> {
+    const post = this.postRepository.create(body);
+    await this.checkKeywordAlert(body.content, body.title);
+    return plainToInstance(CreatePostResponse, post, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async updatePost(id: number, body: UpdatePostDto) {
+    const post = await this.repositoryFindById(id);
+    await this.comparePassword(body.password, post.password);
+
+    await this.postRepository.updateById(id, {
+      ...post,
+      ..._.omit(body, 'password'),
+    });
+    await this.checkKeywordAlert(body.content, body.title);
+    return await this.getPostById(id);
+  }
+
+  async deletePostById(id: number, body: DeletePostByIdDto) {
+    const post = await this.repositoryFindById(id);
+    await this.comparePassword(body.password, post.password);
+    await this.postRepository.deleteById(id);
+  }
+
+  private async repositoryFindById(id: number): Promise<PostEntity> {
+    const post = await this.postRepository.findById(id);
+    if (!post) throw new NotFoundException();
+    return post;
+  }
+
+  private async comparePassword(data: string | Buffer, encrypted: string) {
+    const isMatchPassword = await bcrypt.compare(data, encrypted);
+    if (!isMatchPassword) {
+      throw new BadRequestException('비밀번호가 일치하지 않습니다');
+    }
+  }
+
+  async checkKeywordAlert(content: string, title: string) {
+    // const keywords = await this.keywordRepository.find();
+    // for (const alert of keywords) {
+    //   if (content.includes(alert.keyword) || title.includes(alert.keyword)) {
+    //     this.sendNotification(alert.authorName, alert.keyword);
+    //   }
+    // }
+  }
+
+  sendNotification(author: string, keyword: string) {
+    console.log(
+      `알림: ${author}님이 등록한 키워드 "${keyword}"가 포함된 게시글이 작성되었습니다.`,
+    );
+  }
+}
