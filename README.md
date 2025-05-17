@@ -1,99 +1,142 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Nest.js Posts 구현
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# 프로젝트 기술 명세
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- Nest.js
+- typeorm
+    - Database ORM
+- util
+    - lodash
+    - bcrypt
+    - dotenv
 
-## Description
+# 프로젝트 버전 명세
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- NestJS - 11
+- Nodejs - 22
+- typescript - ^5.7.0
 
-## Project setup
+# 프로젝트 디렉토리 구조
 
-```bash
-$ npm install
+```
+nest-post/
+├── src/
+│   ├── comments/
+│   │   ├── dto/
+│   │   │   ├── create-comment.dto.ts
+│   │   │   ├── create-reply-comment.dto.ts
+│   │   │   └── get-comments.dto.ts
+│   │   ├── comment.controller.ts
+│   │   ├── comment.module.ts
+│   │   └── comment.service.ts
+│   ├── libs/
+│   │   ├── database/
+│   │   │   ├── migrations/
+│   │   │   │   └── 1747457653740-InitSchema.ts
+│   │   │   ├── post/
+│   │   │   │   ├── entity/
+│   │   │   │   │   ├── comment.entity.ts
+│   │   │   │   │   ├── keyword.entity.ts
+│   │   │   │   │   ├── post.entity.ts
+│   │   │   │   │   └── reply-comment.entity.ts
+│   │   │   │   ├── repository/
+│   │   │   │   │   ├── comment.repository.ts
+│   │   │   │   │   ├── keyword.repository.ts
+│   │   │   │   │   ├── post.repository.ts
+│   │   │   │   │   └── reply-comment.repository.ts
+│   │   │   │   └── post.module.ts
+│   │   │   └── data-source.ts
+│   │   ├── module/
+│   │   │   └── keyword.module.ts
+│   │   ├── service/
+│   │       └── keyword.service.ts
+│   ├── posts/
+│   │   ├── dto/
+│   │   │   ├── create-post.dto.ts
+│   │   │   ├── delete-post-by-id.dto.ts
+│   │   │   ├── get-post-by-id.dto.ts
+│   │   │   ├── get-posts.dto.ts
+│   │   │   └── update-post.dto.ts
+│   │   ├── post.controller.ts
+│   │   ├── post.module.ts
+│   │   └── post.service.ts
+│   ├── app.module.ts
+│   └── main.ts
+├── README.md
+├── eslint.config.mjs
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── tsconfig.build.json
+└── tsconfig.json
+
+```
+- posts
+  - 게시글 관련 API 구현 
+- comments
+  - 댓글 관련 API 구현
+- libs
+  - 프로젝트 공통 사용 로직  
+  - database
+    - DATABASE 단위의 typeORM entity, repository
+  - service
+    - 공통 Service 로직
+
+# 로컬 개발환경 설정 방법
+
+## Install
+
+```shell
+nvm use 22
+npm ci
 ```
 
-## Compile and run the project
+## Database 설정
 
-```bash
-# development
-$ npm run start
+localhost Database 생성 필요
+- localhost Database 정보는 .env 파일 참조
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```mysql
+CREATE DATABASE post
 ```
 
-## Run tests
+스키마 생성 및 초기 데이터 추가
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```shell
+npm run migration:run
 ```
 
-## Deployment
+## localhost 구동
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+```shell
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- [Swagger](http://localhost:3000/api/swagger)
 
-## Resources
+# API End-points
 
-Check out a few resources that may come in handy when working with NestJS:
+## 게시글
+- [GET] /api/posts
+- [POST] /api/posts
+- [PUT] /api/posts/:id
+- [DELETE] /api/posts/:id
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 댓글
+- [GET] /api/comments
+- [POST] /api/comments
+- [POST] /api/comments/reply
 
-## Support
+## 키워드 알림
+- 콘솔 로그로 출력
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+알림: 짱구님이 등록한 키워드 "안녕"가 포함된 글이 작성되었습니다.
+```
 
-## Stay in touch
+# Database Schema
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- 게시글 (post) : 댓글 (comment) = 1 : N
+- 댓글 (comment) : 대댓글 (reply_comment) = 1 : N
 
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+![EER Diagram](./static/eer-diagram.png)  
