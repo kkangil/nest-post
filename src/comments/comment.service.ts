@@ -17,6 +17,7 @@ import {
   CreateReplyCommentResponse,
 } from '@src/comments/dto/create-reply-comment.dto';
 import { ReplyCommentRepository } from '@src/libs/database/post/repository/reply-comment.repository';
+import { KeywordService } from '@src/libs/service/keyword.service';
 
 @Injectable()
 export class CommentService {
@@ -24,6 +25,7 @@ export class CommentService {
     private readonly commentRepository: CommentRepository,
     private readonly replyCommentRepository: ReplyCommentRepository,
     private readonly postService: PostService,
+    private readonly keywordService: KeywordService,
   ) {}
 
   async getComments(query: GetCommentsDto): Promise<GetCommentsResponse> {
@@ -51,6 +53,7 @@ export class CommentService {
       ...body,
       post,
     });
+    await this.keywordService.checkKeyword(comment.content);
     return plainToInstance(CreateCommentResponse, comment, {
       excludeExtraneousValues: true,
     });
@@ -65,6 +68,7 @@ export class CommentService {
       ...body,
       comment,
     });
+    await this.keywordService.checkKeyword(comment.content);
     return plainToInstance(CreateReplyCommentResponse, replyComment, {
       excludeExtraneousValues: true,
     });

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, ILike, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { KeywordEntity } from '@src/libs/database/post/entity/keyword.entity';
 
 @Injectable()
@@ -12,11 +12,10 @@ export class KeywordRepository {
     this.keywordRepository = this.dataSource.getRepository(KeywordEntity);
   }
 
-  async find(keyword: string) {
-    const comment = await this.keywordRepository.find({
-      where: {
-        keyword: ILike(`%${keyword}%`),
-      },
-    });
+  async findMatchingKeywords(text: string) {
+    return this.keywordRepository
+      .createQueryBuilder('keyword')
+      .where(':text LIKE CONCAT("%", keyword.keyword, "%")', { text })
+      .getMany();
   }
 }

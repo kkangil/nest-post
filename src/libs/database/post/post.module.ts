@@ -8,6 +8,7 @@ import { PostRepository } from '@src/libs/database/post/repository/post.reposito
 import { CommentRepository } from '@src/libs/database/post/repository/comment.repository';
 import { ReplyCommentEntity } from '@src/libs/database/post/entity/reply-comment.entity';
 import { ReplyCommentRepository } from '@src/libs/database/post/repository/reply-comment.repository';
+import { KeywordRepository } from '@src/libs/database/post/repository/keyword.repository';
 
 @Module({
   imports: [
@@ -38,7 +39,17 @@ import { ReplyCommentRepository } from '@src/libs/database/post/repository/reply
       KeywordEntity,
     ]),
   ],
-  providers: [PostRepository, CommentRepository, ReplyCommentRepository],
-  exports: [PostRepository, CommentRepository, ReplyCommentRepository],
+  providers: [
+    PostRepository,
+    CommentRepository,
+    ReplyCommentRepository,
+    KeywordRepository,
+  ],
+  exports: [
+    PostRepository,
+    CommentRepository,
+    ReplyCommentRepository,
+    KeywordRepository,
+  ],
 })
 export class PostDatabaseModule {}

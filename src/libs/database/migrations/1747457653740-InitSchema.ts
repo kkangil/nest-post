@@ -130,6 +130,10 @@ export class InitSchema1747457653740 implements MigrationInterface {
       authorName: '홍길동',
       keyword: '테스트',
     });
+    await queryRunner.manager.getRepository('keyword').save({
+      authorName: '짱구',
+      keyword: '안녕',
+    });
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

@@ -21,12 +21,13 @@ import { UpdatePostDto } from '@src/posts/dto/update-post.dto';
 import { GetPostByIdResponse } from '@src/posts/dto/get-post-by-id.dto';
 import { DeletePostByIdDto } from '@src/posts/dto/delete-post-by-id.dto';
 import { PostEntity } from '@src/libs/database/post/entity/post.entity';
+import { KeywordService } from '@src/libs/service/keyword.service';
 
 @Injectable()
 export class PostService {
   constructor(
     private readonly postRepository: PostRepository,
-    // private readonly keywordRepository: PostRepository,
+    private readonly keywordService: KeywordService,
   ) {}
 
   async getPosts(query: GetPostsDto): Promise<GetPostsResponse> {
@@ -55,7 +56,7 @@ export class PostService {
 
   async createPost(body: CreatePostDto): Promise<CreatePostResponse> {
     const post = this.postRepository.create(body);
-    await this.checkKeywordAlert(body.content, body.title);
+    await this.keywordService.checkKeyword(`${body.title}${body.content}`);
     return plainToInstance(CreatePostResponse, post, {
       excludeExtraneousValues: true,
     });
@@ -69,7 +70,6 @@ export class PostService {
       ...post,
       ..._.omit(body, 'password'),
     });
-    await this.checkKeywordAlert(body.content, body.title);
     return await this.getPostById(id);
   }
 
@@ -90,20 +90,5 @@ export class PostService {
     if (!isMatchPassword) {
       throw new BadRequestException('비밀번호가 일치하지 않습니다');
     }
-  }
-
-  async checkKeywordAlert(content: string, title: string) {
-    // const keywords = await this.keywordRepository.find();
-    // for (const alert of keywords) {
-    //   if (content.includes(alert.keyword) || title.includes(alert.keyword)) {
-    //     this.sendNotification(alert.authorName, alert.keyword);
-    //   }
-    // }
-  }
-
-  sendNotification(author: string, keyword: string) {
-    console.log(
-      `알림: ${author}님이 등록한 키워드 "${keyword}"가 포함된 게시글이 작성되었습니다.`,
-    );
   }
 }
