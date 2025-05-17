@@ -25,7 +25,6 @@ import {
   CreatePostResponse,
 } from '@src/posts/dto/create-post.dto';
 import { UpdatePostDto } from '@src/posts/dto/update-post.dto';
-import { GetPostByIdResponse } from '@src/posts/dto/get-post-by-id.dto';
 import { DeletePostByIdDto } from '@src/posts/dto/delete-post-by-id.dto';
 
 @ApiTags('게시글')
@@ -41,16 +40,6 @@ export class PostController {
   @ApiOkResponse({ type: GetPostsResponse })
   getPosts(@Query() query: GetPostsDto) {
     return this.postService.getPosts(query);
-  }
-
-  @Get(':id')
-  @ApiOperation({
-    summary: '게시글 상세 조회',
-  })
-  @ApiOkResponse({ type: GetPostByIdResponse })
-  @ApiNotFoundResponse()
-  getPostById(@Param('id') id: number) {
-    return this.postService.getPostById(id);
   }
 
   @Post()
