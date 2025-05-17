@@ -1,14 +1,9 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, ILike, In, QueryRunner, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { PostEntity } from '@src/database/post/entity/post.entity';
 import { GetPostsDto } from '@src/posts/dto/get-posts.dto';
 import { CreatePostDto } from '@src/posts/dto/create-post.dto';
-import { UpdatePostDto } from '@src/posts/dto/update-post.dto';
 
 @Injectable()
 export class PostRepository {
@@ -31,8 +26,8 @@ export class PostRepository {
     });
   }
 
-  async create(params: CreatePostDto) {
-    const post = this.postRepository.create(params);
+  async create(entity: CreatePostDto) {
+    const post = this.postRepository.create(entity);
     return await this.postRepository.save(post);
   }
 
@@ -40,8 +35,8 @@ export class PostRepository {
     return await this.postRepository.findOneBy({ id });
   }
 
-  async updateById(id: number, post: Partial<PostEntity>) {
-    const result = await this.postRepository.update({ id }, post);
+  async updateById(id: number, entity: Partial<PostEntity>) {
+    const result = await this.postRepository.update({ id }, entity);
 
     if (result.affected === 0) {
       throw new NotFoundException('게시글이 존재하지 않습니다');

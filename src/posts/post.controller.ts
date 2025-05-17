@@ -11,7 +11,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiQuery,
   ApiBody,
   ApiParam,
   ApiCreatedResponse,
@@ -73,7 +72,7 @@ export class PostController {
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdatePostDto })
   @ApiBadRequestResponse({ description: '비밀번호가 일치하지 않습니다' })
-  @ApiNotFoundResponse()
+  @ApiNotFoundResponse({ description: '게시글이 존재하지 않습니다' })
   updatePost(@Param('id') id: number, @Body() dto: UpdatePostDto) {
     return this.postService.updatePost(id, dto);
   }
@@ -84,7 +83,7 @@ export class PostController {
     description: '비밀번호 일치 시 게시글 삭제 가능',
   })
   @ApiBadRequestResponse({ description: '비밀번호가 일치하지 않습니다' })
-  @ApiNotFoundResponse()
+  @ApiNotFoundResponse({ description: '게시글이 존재하지 않습니다' })
   deletePostById(@Param('id') id: number, @Body() body: DeletePostByIdDto) {
     return this.postService.deletePostById(id, body);
   }

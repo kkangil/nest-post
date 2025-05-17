@@ -5,6 +5,9 @@ import { PostEntity } from '@src/database/post/entity/post.entity';
 import { CommentEntity } from '@src/database/post/entity/comment.entity';
 import { KeywordEntity } from '@src/database/post/entity/keyword.entity';
 import { PostRepository } from '@src/database/post/repository/post.repository';
+import { CommentRepository } from '@src/database/post/repository/comment.repository';
+import { ReplyCommentEntity } from '@src/database/post/entity/reply-comment.entity';
+import { ReplyCommentRepository } from '@src/database/post/repository/reply-comment.repository';
 
 @Module({
   imports: [
@@ -19,13 +22,23 @@ import { PostRepository } from '@src/database/post/repository/post.repository';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [PostEntity, CommentEntity, KeywordEntity],
+        entities: [
+          PostEntity,
+          CommentEntity,
+          ReplyCommentEntity,
+          KeywordEntity,
+        ],
         synchronize: false,
       }),
     }),
-    TypeOrmModule.forFeature([PostEntity, CommentEntity, KeywordEntity]),
+    TypeOrmModule.forFeature([
+      PostEntity,
+      CommentEntity,
+      ReplyCommentEntity,
+      KeywordEntity,
+    ]),
   ],
-  providers: [PostRepository],
-  exports: [PostRepository],
+  providers: [PostRepository, CommentRepository, ReplyCommentRepository],
+  exports: [PostRepository, CommentRepository, ReplyCommentRepository],
 })
 export class PostDatabaseModule {}

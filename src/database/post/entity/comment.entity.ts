@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PostEntity } from '@src/database/post/entity/post.entity';
+import { ReplyCommentEntity } from '@src/database/post/entity/reply-comment.entity';
 
 @Entity('comment')
 export class CommentEntity {
@@ -17,14 +18,8 @@ export class CommentEntity {
   @ManyToOne(() => PostEntity, (post) => post.comments, { onDelete: 'CASCADE' })
   post: PostEntity;
 
-  @ManyToOne(() => CommentEntity, (comment) => comment.replies, {
-    nullable: true,
-    onDelete: 'CASCADE',
-  })
-  parent: CommentEntity;
-
-  @OneToMany(() => CommentEntity, (comment) => comment.parent)
-  replies: CommentEntity[];
+  @OneToMany(() => ReplyCommentEntity, (reply) => reply.comment)
+  replies: ReplyCommentEntity[];
 
   @Column('text')
   content: string;

@@ -79,9 +79,9 @@ export class PostService {
     await this.postRepository.deleteById(id);
   }
 
-  private async repositoryFindById(id: number): Promise<PostEntity> {
+  async repositoryFindById(id: number): Promise<PostEntity> {
     const post = await this.postRepository.findById(id);
-    if (!post) throw new NotFoundException();
+    if (!post) throw new NotFoundException('게시글이 존재하지 않습니다');
     return post;
   }
 
